@@ -1,6 +1,6 @@
 
 --[=[
-	Copyright (c) 2024, seanjosep39
+	Copyright (c) 2024, AnotherSubatomo
 	SPDX-License-Identifier: MIT
 	
 	QOI en-/decoder in Luau for Roblox
