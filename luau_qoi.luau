@@ -161,13 +161,13 @@ function QOI_ENCODE(image: ImageData): (buffer)
 						endian +=        diff_b + 2
 						
 						buffer_writeu8(compressed, write_idx, QOI_OP_DIFF + endian)
-						write_idx += 1
+						write_idx += 1;
 					elseif (diff_g >= -32 and diff_g <= 31) and
 						(dr_dg >= -8 and dr_dg <= 7) and
 						(db_dg >= -8 and db_dg <= 7) then
 						buffer_writeu8(compressed, write_idx,     QOI_OP_LUMA + (diff_g + 32))        -- bias by 32
 						buffer_writeu8(compressed, write_idx + 1, lshift(dr_dg + 8, 4) + (db_dg + 8)) -- bias by 8
-						write_idx += 2
+						write_idx += 2;
 					else
 						buffer_writeu8(compressed, write_idx,      254)
 						buffer_writeu32(compressed, write_idx + 1, cur_px)
@@ -267,6 +267,7 @@ function QOI_DECODE(file: buffer): (ImageData)
 				b += dg +        band(byte2, 0x0f)     - 8
 
 			elseif op == QOI_OP_RUN then
+				-- we don't unbias, because the loop implicitly does that for us
 				run = band(byte1, QOI_MASK63)
 			end
 
@@ -277,12 +278,12 @@ function QOI_DECODE(file: buffer): (ImageData)
 			buffer_writeu8(seen_pixels, cache_idx + 3, a)
 		end
 
-		-- Write the pixel
+		-- Write the pixel.
 		buffer_writeu8(raw_image, write_idx, r)
 		buffer_writeu8(raw_image, write_idx + 1, g)
 		buffer_writeu8(raw_image, write_idx + 2, b)
 		buffer_writeu8(raw_image, write_idx + 3, a)
-		write_idx += 4
+		write_idx += 4;
 	end
 
 	return {
@@ -299,7 +300,7 @@ function READ_TO_IMAGE(imageData: ImageData): (EditableImage)
 	assert(game and Vector2, "Cannot read into an editable image; you are in a non-Roblox environment.")
 	assert(imageData.Channels == 4, "Cannot read into an editable image; channel amounts other than 4 are unsupported.")
 
-	local AssetService = (game::DataModel):GetService 'AssetService'
+	local AssetService = game:GetService 'AssetService'
 	local image_size = Vector2.new(imageData.Width, imageData.Height)
 	local image = AssetService:CreateEditableImage({ Size = image_size })
 	image:WritePixelsBuffer(Vector2.zero, image_size, imageData.Data)
