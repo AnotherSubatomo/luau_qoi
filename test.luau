@@ -1,5 +1,5 @@
 
--- Simple regression(-ish) test for luau_qoi.
+-- Simple regression and performance test for luau_qoi.
 
 --!strict
 --!native
@@ -89,6 +89,10 @@ end
 CorrectnessTest()
 task.wait()
 
+local OriginalSize = buffer.len(ForeimageData.Data)
+warn(`Sample image size: {Foreimage.Size}`)
+warn(`Sample image data size before encoding: {OriginalSize}`)
+
 Benchmark(40, QOI.encode, ForeimageData)
 -- As of August 29, 2025, the results of the benchmark relative to the
 -- `ForeimageData` is that the `encode()` function takes ~44 ms on average.
@@ -97,6 +101,9 @@ Benchmark(40, QOI.encode, ForeimageData)
 -- of the same spacial complexity, this is about a 14x improvement!
 
 local EncodedForeimageData = QOI.encode(ForeimageData)
+local CompressedSize = buffer.len(EncodedForeimageData)
+warn(`Sample image data size after encoding: {CompressedSize}`)
+warn(`Compression percentage: {100 - (CompressedSize / OriginalSize * 100)}% less`)
 task.wait()
 
 Benchmark(40, QOI.decode, EncodedForeimageData)
