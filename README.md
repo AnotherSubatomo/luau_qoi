@@ -1,8 +1,6 @@
 # QOI in Luau
 A [QOI](https://github.com/phoboslab/qoi) image de-/encoder for fast and lossless compression in Luau, for Roblox.
 
-**NOTE:** This program utilizes Roblox's beta feature `EditableImage`, meaning that this cannot be used by published games for the meantime.
-
 ## Why?
 - This de-/encoder is **stupidly simple, yet elegant**; despite **being less than 300 *lines of code***, it **can compress images down to 50~20%** of it's original size and **decompress losslessly**.
 - Encodes and decodes **in less that a second**.
